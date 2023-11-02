@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CalendarScopeService } from './calendar-scope.service';
+import { CalendarScopeService } from '../calendar-scope.service';
 
 describe('CalendarScopeService', () => {
   let service: CalendarScopeService;
