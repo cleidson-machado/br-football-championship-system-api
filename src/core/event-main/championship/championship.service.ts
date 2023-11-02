@@ -1,11 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateChampionshipDto } from './dto/create-championship.dto';
 import { UpdateChampionshipDto } from './dto/update-championship.dto';
+import { Repository } from 'typeorm';
+import { Championship } from './entities/championship.entity';
 
 @Injectable()
 export class ChampionshipService {
+  constructor(
+    @Inject('CHAMPIONSHIP_REPOSITORY')
+    private championshipRepository: Repository<Championship>,
+  ) {}
+
   create(createChampionshipDto: CreateChampionshipDto) {
-    return 'This action adds a new championship';
+    return this.championshipRepository.save(createChampionshipDto);
   }
 
   findAll() {
