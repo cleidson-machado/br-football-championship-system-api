@@ -1,5 +1,6 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity({ schema: 'DIP', name: 'championships' })
 export class Championship {
   @PrimaryGeneratedColumn('uuid')
   idChamp: string;

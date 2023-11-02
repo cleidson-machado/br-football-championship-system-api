@@ -4,6 +4,7 @@
 
 # DataBase Info
 .env
+/src/dataBase/migrationsConfigTsFile
 
 # Logs
 logs
