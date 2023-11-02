@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+# DataBase Info
+.env
+
 # Logs
 logs
 *.log
