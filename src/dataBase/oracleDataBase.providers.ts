@@ -17,6 +17,7 @@ export const oracleDataBaseProviders = [
         serviceName: 'CAIXADEV',
         entities: ['./dist/**/*.entity.js'],
         synchronize: false,
+        logging: ['query', 'error', 'schema'],
       });
 
       return dataSource.initialize();
