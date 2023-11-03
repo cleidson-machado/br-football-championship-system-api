@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
-import { oracleDataBaseProviders } from './oracleDataBase.providers';
+import { OracleDataBaseProviders } from './oracleDataBase.providers';
 
 @Module({
-  providers: [...oracleDataBaseProviders],
-  exports: [...oracleDataBaseProviders],
+  providers: [...OracleDataBaseProviders],
+  exports: [...OracleDataBaseProviders],
 })
 export class oracleDataBaseModule {}
