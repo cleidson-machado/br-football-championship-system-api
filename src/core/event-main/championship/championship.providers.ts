@@ -2,7 +2,7 @@
 import { DataSource } from 'typeorm';
 import { Championship } from './entities/championship.entity';
 
-export const championshipProviders = [
+export const ChampionshipProviders = [
   {
     provide: 'CHAMPIONSHIP_REPOSITORY',
     useFactory: (dataSource: DataSource) =>
