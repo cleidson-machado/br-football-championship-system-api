@@ -7,3 +7,8 @@ import { OracleDataBaseProviders } from './oracleDataBase.providers';
   exports: [...OracleDataBaseProviders],
 })
 export class oracleDataBaseModule {}
+
+const test = [...OracleDataBaseProviders]; //## INTERESSANTE! TENTAR APLICAR NO COMIT ZOADO.. VER SEDÁ PRA USAR
+//NO LUGAR DAS ENTRADAS DAS ENTIDADES / TOKEN NAS MODULES..
+
+console.log(test);

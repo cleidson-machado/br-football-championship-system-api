@@ -18,6 +18,9 @@ export class Championship {
   locationCity: string; //FK_RELATION?... NO LEAVE THAT WITH FRONT END!
 
   @Column({ nullable: false })
+  categoryName: string; //TEXT
+
+  @Column({ nullable: false })
   categoryAgeType: string; //ENUM
 
   @Column({ nullable: false })
@@ -30,7 +33,7 @@ export class Championship {
   competitionFormat: string; //ENUM
 
   @Column({ name: 'team_size_number', nullable: false })
-  teamSize: number;
+  teamSize: number; //TIME SIZE BY EVENT
 
   @Column({ name: 'group_size_number', nullable: false })
   groupSize: number;
