@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Championship } from 'src/core/event-main/championship/entities/championship.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ schema: 'DIP', name: 'calendars' })
 export class CalendarScope {
@@ -29,6 +36,11 @@ export class CalendarScope {
   @Column({ name: 'is_register_days_mandatory', nullable: true, select: false })
   registrationAllowPreviousDates?: number;
 
-  @Column({ name: 'championship_id_fk', select: false })
+  @Column({ select: true })
   championshipIdFk: string;
+
+  //THIS IS A OUTGOING RELATIONSHIP..
+  @ManyToOne(() => Championship, (championship) => championship.calendarScopes)
+  @JoinColumn({ name: 'championshipIdFk', referencedColumnName: 'idChamp' })
+  championship: Championship;
 }

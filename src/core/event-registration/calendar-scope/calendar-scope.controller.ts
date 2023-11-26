@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CalendarScopeService } from './calendar-scope.service';
 import { CreateCalendarScopeDto } from './dto/create-calendar-scope.dto';
 import { UpdateCalendarScopeDto } from './dto/update-calendar-scope.dto';
@@ -23,7 +32,10 @@ export class CalendarScopeController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCalendarScopeDto: UpdateCalendarScopeDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCalendarScopeDto: UpdateCalendarScopeDto,
+  ) {
     return this.calendarScopeService.update(+id, updateCalendarScopeDto);
   }
 

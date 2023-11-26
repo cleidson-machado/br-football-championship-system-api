@@ -11,12 +11,13 @@ export class ChampionshipService {
     private championshipRepository: Repository<Championship>,
   ) {}
 
-  create(createChampionshipDto: CreateChampionshipDto) {
-    return this.championshipRepository.save(createChampionshipDto);
+  create(payLoad: CreateChampionshipDto) {
+    return this.championshipRepository.save(payLoad);
   }
 
   findAll() {
-    return `This action returns all championship`;
+    //return `This action returns all championship`;
+    return this.championshipRepository.find();
   }
 
   findOne(id: number) {

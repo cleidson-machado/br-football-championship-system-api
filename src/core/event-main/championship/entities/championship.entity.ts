@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { CalendarScope } from 'src/core/event-registration/calendar-scope/entities/calendar-scope.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ schema: 'DIP', name: 'championships' })
 export class Championship {
@@ -40,4 +41,14 @@ export class Championship {
 
   @Column({ nullable: false })
   finalStageType: string; //ENUM
+
+  //THIS IS A INPUT RELATIONSHIP...
+  @OneToMany(
+    () => CalendarScope,
+    (calendarScope) => calendarScope.championship,
+    {
+      cascade: true,
+    },
+  )
+  calendarScopes: CalendarScope[];
 }
