@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { ChampionshipService } from './championship.service';
 import { ChampionshipController } from './championship.controller';

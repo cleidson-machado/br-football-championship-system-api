@@ -12,7 +12,7 @@ export const OracleDataBaseProviders = [
         port: Number(process.env.PORT),
         username: process.env.USER,
         password: process.env.PASSWD,
-        database: process.env.CAIXADEV,
+        database: process.env.DBASE,
         schema: process.env.SCHEMA,
         serviceName: process.env.SERVICE,
         entities: ['./dist/**/*.entity.js'],

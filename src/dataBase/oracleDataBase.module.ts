@@ -8,7 +8,10 @@ import { OracleDataBaseProviders } from './oracleDataBase.providers';
 })
 export class oracleDataBaseModule {}
 
-const test = [...OracleDataBaseProviders]; //## INTERESSANTE! TENTAR APLICAR NO COMIT ZOADO.. VER SEDÁ PRA USAR
-//NO LUGAR DAS ENTRADAS DAS ENTIDADES / TOKEN NAS MODULES..
+const providerObject = [...OracleDataBaseProviders]; //JUST TO TEST IF THE DATA BASE CLASS IS WORKING GOOD!
 
-console.log(test);
+console.log(
+  'Connection to ORACLE_DataBase is LOADED by Module Name: ' +
+    oracleDataBaseModule.name,
+);
+console.log(providerObject);

@@ -1,15 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateCalendarScopeDto } from './dto/create-calendar-scope.dto';
 import { UpdateCalendarScopeDto } from './dto/update-calendar-scope.dto';
+import { Repository } from 'typeorm';
+import { CalendarScope } from './entities/calendar-scope.entity';
 
 @Injectable()
 export class CalendarScopeService {
-  create(createCalendarScopeDto: CreateCalendarScopeDto) {
-    return 'This action adds a new calendarScope';
+  constructor(
+    @Inject('CALENDARSCOPE_REPOSITORY')
+    private calendarScopeRepository: Repository<CalendarScope>,
+  ) {}
+
+  create(payLoad: CreateCalendarScopeDto) {
+    return this.calendarScopeRepository.save(payLoad);
   }
 
   findAll() {
-    return `This action returns all calendarScope`;
+    return this.calendarScopeRepository.find({
+      relations: { championship: true },
+    });
   }
 
   findOne(id: number) {

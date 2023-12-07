@@ -16,8 +16,9 @@ export class ChampionshipService {
   }
 
   findAll() {
-    //return `This action returns all championship`;
-    return this.championshipRepository.find();
+    return this.championshipRepository.find({
+      relations: { calendarScopes: true },
+    });
   }
 
   findOne(id: number) {
