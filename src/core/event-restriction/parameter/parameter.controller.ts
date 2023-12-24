@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ParameterService } from './parameter.service';
 import { CreateParameterDto } from './dto/create-parameter.dto';
 import { UpdateParameterDto } from './dto/update-parameter.dto';
@@ -19,16 +28,19 @@ export class ParameterController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.parameterService.findOne(+id);
+    return this.parameterService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateParameterDto: UpdateParameterDto) {
-    return this.parameterService.update(+id, updateParameterDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateParameterDto: UpdateParameterDto,
+  ) {
+    return this.parameterService.update(id, updateParameterDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.parameterService.remove(+id);
+    return this.parameterService.remove(id);
   }
 }

@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ schema: 'DIP', name: 'parameters' })
 export class Parameter {
@@ -14,13 +20,13 @@ export class Parameter {
   @Column({ nullable: false })
   onAction: string; //UPDATE, CREATE OR DELETE
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   isActive?: number; //BOOLEAN
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   itIsTemporary?: number; //BOOLEAN
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   dueDaysNumber?: number; //IF IS TEMP HOW MANY DAY TO USE IT.. em relação a data de atualização??
 
   @Column({ nullable: true })
@@ -32,10 +38,10 @@ export class Parameter {
   @Column({ nullable: true })
   mathAction?: string; // ADD, SUBTRACT, MUTIPlY OR TO DIVIDE
 
-  @Column({ nullable: false })
+  @CreateDateColumn({ name: 'CREATED_AT' })
   created_at?: Date;
 
-  @Column({ nullable: false })
+  @UpdateDateColumn({ name: 'UPDATED_AT' })
   updated_at?: Date;
 
   @Column({ nullable: false })

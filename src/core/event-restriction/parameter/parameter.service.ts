@@ -1,26 +1,52 @@
-import { Injectable } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  Inject,
+  Injectable,
+  PreconditionFailedException,
+} from '@nestjs/common';
 import { CreateParameterDto } from './dto/create-parameter.dto';
 import { UpdateParameterDto } from './dto/update-parameter.dto';
+import { Repository } from 'typeorm';
+import { Parameter } from './entities/parameter.entity';
+import { IParameter } from './parameter.interface';
 
 @Injectable()
-export class ParameterService {
-  create(createParameterDto: CreateParameterDto) {
-    return 'This action adds a new parameter';
+export class ParameterService implements IParameter<Parameter> {
+  constructor(
+    @Inject('PARAMETER_REPOSITORY')
+    private parameterRepository: Repository<Parameter>,
+  ) {}
+
+  public async create(payLoad: CreateParameterDto) {
+    try {
+      const entityObjectInMemory = this.parameterRepository.create(payLoad);
+      return await this.parameterRepository.save(entityObjectInMemory);
+    } catch (err) {
+      throw new PreconditionFailedException(`Was an Error: ${err}`);
+    }
   }
 
-  findAll() {
-    return `This action returns all parameter`;
+  public async findAll() {
+    return await this.parameterRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} parameter`;
+  public async findOne(id: string): Promise<Parameter> {
+    return await this.parameterRepository.findOne({
+      where: { idParameter: id },
+    });
   }
 
-  update(id: number, updateParameterDto: UpdateParameterDto) {
-    return `This action updates a #${id} parameter`;
+  public async update(
+    id: string,
+    payLoad: UpdateParameterDto,
+  ): Promise<Parameter> {
+    await this.parameterRepository.update({ idParameter: id }, payLoad);
+    return null;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} parameter`;
+  public async remove(id: string): Promise<Parameter> {
+    await this.parameterRepository.delete({ idParameter: id });
+    return null;
   }
 }
