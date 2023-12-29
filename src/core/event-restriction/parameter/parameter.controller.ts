@@ -4,9 +4,9 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { ParameterService } from './parameter.service';
 import { CreateParameterDto } from './dto/create-parameter.dto';
@@ -18,29 +18,29 @@ export class ParameterController {
 
   @Post()
   create(@Body() createParameterDto: CreateParameterDto) {
-    return this.parameterService.create(createParameterDto);
+    return this.parameterService.saveOne(createParameterDto);
   }
 
   @Get()
   findAll() {
-    return this.parameterService.findAll();
+    return this.parameterService.getAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.parameterService.findOne(id);
+    return this.parameterService.getOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateParameterDto: UpdateParameterDto,
   ) {
-    return this.parameterService.update(id, updateParameterDto);
+    return this.parameterService.setOne(id, updateParameterDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.parameterService.remove(id);
+    return this.parameterService.deleteOne(id);
   }
 }

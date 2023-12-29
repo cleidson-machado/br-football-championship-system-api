@@ -4,15 +4,12 @@ import { CreateChampionshipDto } from './dto/create-championship.dto';
 import { UpdateChampionshipDto } from './dto/update-championship.dto';
 import { Repository } from 'typeorm';
 import { Championship } from './entities/championship.entity';
-import { ParameterService } from 'src/core/event-restriction/parameter/parameter.service';
 
 @Injectable()
 export class ChampionshipService {
   constructor(
     @Inject('CHAMPIONSHIP_REPOSITORY')
     private championshipRepository: Repository<Championship>,
-
-    private readonly parametro: ParameterService,
   ) {}
 
   create(payLoad: CreateChampionshipDto) {

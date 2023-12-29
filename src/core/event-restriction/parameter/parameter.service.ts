@@ -1,52 +1,101 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  Inject,
   Injectable,
+  Logger,
+  NotFoundException,
   PreconditionFailedException,
 } from '@nestjs/common';
 import { CreateParameterDto } from './dto/create-parameter.dto';
 import { UpdateParameterDto } from './dto/update-parameter.dto';
-import { Repository } from 'typeorm';
 import { Parameter } from './entities/parameter.entity';
-import { IParameter } from './parameter.interface';
+import { ParameterRepository } from './parameter.repository';
 
 @Injectable()
-export class ParameterService implements IParameter<Parameter> {
-  constructor(
-    @Inject('PARAMETER_REPOSITORY')
-    private parameterRepository: Repository<Parameter>,
-  ) {}
+export class ParameterService {
+  private logger = new Logger(ParameterService.name);
+  constructor(private parameterRepository: ParameterRepository) {}
 
-  public async create(payLoad: CreateParameterDto) {
+  public async saveOne(payLoad: CreateParameterDto) {
     try {
-      const entityObjectInMemory = this.parameterRepository.create(payLoad);
-      return await this.parameterRepository.save(entityObjectInMemory);
+      return await this.parameterRepository.saveOne(payLoad);
     } catch (err) {
       throw new PreconditionFailedException(`Was an Error: ${err}`);
     }
   }
 
-  public async findAll() {
-    return await this.parameterRepository.find();
+  public async getAll(): Promise<CreateParameterDto[]> {
+    try {
+      const parameter = await this.parameterRepository.getAll();
+      if (parameter?.length === 0) {
+        throw new Error(
+          `There is no data in the database table! NO DATA FOUND!.`,
+        );
+      }
+      return parameter;
+    } catch (err) {
+      this.logger.log(
+        `ParameterService:getAll : ${JSON.stringify(err.message)}`,
+      );
+      throw new NotFoundException(`Was an Error: ${err}`);
+    }
   }
 
-  public async findOne(id: string): Promise<Parameter> {
-    return await this.parameterRepository.findOne({
-      where: { idParameter: id },
-    });
+  public async getOne(id: string): Promise<Parameter | null> {
+    try {
+      const parameter = await this.parameterRepository.getOne(id);
+      if (!parameter) {
+        throw new Error(
+          `The PARAMETRO with ID: ${id} was NOT FOUND on the Database!`,
+        );
+      }
+      return parameter;
+    } catch (err) {
+      this.logger.log(
+        `ParameterService:getOne : ${JSON.stringify(err.message)}`,
+      );
+      throw new NotFoundException(`Was an Error: ${err}`);
+    }
   }
 
-  public async update(
+  public async setOne(
     id: string,
     payLoad: UpdateParameterDto,
   ): Promise<Parameter> {
-    await this.parameterRepository.update({ idParameter: id }, payLoad);
-    return null;
+    try {
+      const parameter = await this.getOne(id);
+      if (!parameter) {
+        throw new Error(
+          `The History with ID: ${id} was NOT FOUND on the Database!`,
+        );
+      } else {
+        await this.parameterRepository.setOne(id, payLoad);
+        return await this.getOne(id);
+      }
+    } catch (err) {
+      this.logger.log(
+        `ParameterService:setOne : ${JSON.stringify(err.message)}`,
+      );
+      throw new NotFoundException(`Was an Error: ${err}`);
+    }
   }
 
-  public async remove(id: string): Promise<Parameter> {
-    await this.parameterRepository.delete({ idParameter: id });
-    return null;
+  public async deleteOne(id: string): Promise<any> {
+    try {
+      const parameter = await this.getOne(id);
+      if (!parameter) {
+        throw new Error(
+          `The History with ID: ${id} was NOT FOUND on the Database!`,
+        );
+      } else {
+        await this.parameterRepository.deleteOne(id);
+        return { code: 200, message: 'OK Removed!' };
+      }
+    } catch (err) {
+      this.logger.log(
+        `ParameterService:deleteOne : ${JSON.stringify(err.message)}`,
+      );
+      throw new PreconditionFailedException(`Was an Error: ${err}`);
+    }
   }
 }

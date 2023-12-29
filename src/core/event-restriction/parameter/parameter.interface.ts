@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 
 export interface IParameter<T> {
-  create(payLoad: T): Promise<T>;
+  saveOne(payLoad: T): Promise<T>;
 
-  findAll(): Promise<T[] | null>;
+  getAll(): Promise<T[] | null>;
 
-  findOne(id: string): Promise<T | null>;
+  getOne(id: string): Promise<T | null>;
 
-  update(id: string, payLoad: T): Promise<T>;
+  setOne(id: string, payLoad: T): Promise<void>;
 
-  remove(id: string): Promise<T>;
+  deleteOne(id: string): Promise<void>;
 }
