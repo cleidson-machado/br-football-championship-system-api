@@ -1,35 +1,96 @@
-import { Inject, Injectable } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  PreconditionFailedException,
+} from '@nestjs/common';
 import { CreateCalendarScopeDto } from './dto/create-calendar-scope.dto';
 import { UpdateCalendarScopeDto } from './dto/update-calendar-scope.dto';
-import { Repository } from 'typeorm';
+import { CalendarScopeRepository } from './calendar-scope.repository';
 import { CalendarScope } from './entities/calendar-scope.entity';
 
 @Injectable()
 export class CalendarScopeService {
-  constructor(
-    @Inject('CALENDARSCOPE_REPOSITORY')
-    private calendarScopeRepository: Repository<CalendarScope>,
-  ) {}
+  private logger = new Logger(CalendarScopeService.name);
+  constructor(private calendarScopeRepository: CalendarScopeRepository) {}
 
-  create(payLoad: CreateCalendarScopeDto) {
-    return this.calendarScopeRepository.save(payLoad);
+  public async saveOne(payLoad: CreateCalendarScopeDto) {
+    try {
+      return this.calendarScopeRepository.saveOne(payLoad);
+    } catch (err) {
+      throw new PreconditionFailedException(`Was an Error: ${err}`);
+    }
   }
 
-  findAll() {
-    return this.calendarScopeRepository.find({
-      relations: { championship: true },
-    });
+  public async getAll(): Promise<CreateCalendarScopeDto[]> {
+    try {
+      const calendars = await this.calendarScopeRepository.getAll();
+      if (calendars?.length === 0) {
+        throw new Error(
+          `There is no data in the database table! NO DATA FOUND!.`,
+        );
+      }
+      return calendars;
+    } catch (err) {
+      this.logger.log(
+        `CalendarScopeService:getAll : ${JSON.stringify(err.message)}`,
+      );
+      throw new NotFoundException(`Was an Error: ${err}`);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} calendarScope`;
+  public async getOne(id: string): Promise<CalendarScope | null> {
+    try {
+      const calendar = await this.calendarScopeRepository.getOne(id);
+      if (!calendar) {
+        throw new Error(
+          `The CALENDAR with ID: ${id} was NOT FOUND on the Database!`,
+        );
+      }
+      return calendar;
+    } catch (err) {
+      this.logger.log(
+        `CalendarScopeService:getOne : ${JSON.stringify(err.message)}`,
+      );
+      throw new NotFoundException(`Was an Error: ${err}`);
+    }
   }
 
-  update(id: number, updateCalendarScopeDto: UpdateCalendarScopeDto) {
-    return `This action updates a #${id} calendarScope`;
+  public async setOne(
+    id: string,
+    payLoad: UpdateCalendarScopeDto,
+  ): Promise<CalendarScope> {
+    try {
+      const calendar = await this.getOne(id);
+      if (!calendar) {
+        throw new Error(
+          `The CALENDAR with ID: ${id} was NOT FOUND on the Database!`,
+        );
+      } else {
+        await this.calendarScopeRepository.setOne(id, payLoad);
+        return await this.getOne(id);
+      }
+    } catch (err) {
+      this.logger.log(
+        `CalendarScopeService:getOne : ${JSON.stringify(err.message)}`,
+      );
+      throw new NotFoundException(`Was an Error: ${err}`);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} calendarScope`;
+  public async deleteOne(id: string) {
+    try {
+      const calendar = await this.getOne(id);
+      if (!calendar) {
+        throw new Error(
+          `The CALENDAR with ID: ${id} was NOT FOUND on the Database!`,
+        );
+      } else {
+        await this.calendarScopeRepository.deleteOne(id);
+        return { code: 200, message: 'OK Removed!' };
+      }
+    } catch (error) {}
   }
 }

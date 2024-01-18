@@ -18,17 +18,17 @@ export class CalendarScopeController {
 
   @Post()
   create(@Body() createCalendarScopeDto: CreateCalendarScopeDto) {
-    return this.calendarScopeService.create(createCalendarScopeDto);
+    return this.calendarScopeService.saveOne(createCalendarScopeDto);
   }
 
   @Get()
   findAll() {
-    return this.calendarScopeService.findAll();
+    return this.calendarScopeService.getAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.calendarScopeService.findOne(+id);
+    return this.calendarScopeService.getOne(id);
   }
 
   @Patch(':id')
@@ -36,11 +36,11 @@ export class CalendarScopeController {
     @Param('id') id: string,
     @Body() updateCalendarScopeDto: UpdateCalendarScopeDto,
   ) {
-    return this.calendarScopeService.update(+id, updateCalendarScopeDto);
+    return this.calendarScopeService.setOne(id, updateCalendarScopeDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.calendarScopeService.remove(+id);
+    return this.calendarScopeService.deleteOne(id);
   }
 }
