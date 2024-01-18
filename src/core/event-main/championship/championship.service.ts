@@ -1,36 +1,101 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+  PreconditionFailedException,
+} from '@nestjs/common';
 import { CreateChampionshipDto } from './dto/create-championship.dto';
 import { UpdateChampionshipDto } from './dto/update-championship.dto';
-import { Repository } from 'typeorm';
+import { ChampionshipRepository } from './championship.repository';
 import { Championship } from './entities/championship.entity';
 
 @Injectable()
 export class ChampionshipService {
-  constructor(
-    @Inject('CHAMPIONSHIP_REPOSITORY')
-    private championshipRepository: Repository<Championship>,
-  ) {}
+  private logger = new Logger(ChampionshipService.name);
+  constructor(private championshipRepository: ChampionshipRepository) {}
 
-  create(payLoad: CreateChampionshipDto) {
-    return this.championshipRepository.save(payLoad);
+  public async saveOne(payLoad: CreateChampionshipDto) {
+    try {
+      return this.championshipRepository.saveOne(payLoad);
+    } catch (err) {
+      throw new PreconditionFailedException(`Was an Error: ${err}`);
+    }
   }
 
-  findAll() {
-    return this.championshipRepository.find({
-      relations: { calendarScopes: true },
-    });
+  public async getAll(): Promise<CreateChampionshipDto[]> {
+    try {
+      const championships = await this.championshipRepository.getAll();
+      if (championships?.length === 0) {
+        throw new Error(
+          `There is no data in the database table! NO DATA FOUND!.`,
+        );
+      }
+      return championships;
+    } catch (err) {
+      this.logger.log(
+        `CalendarScopeService:getAll : ${JSON.stringify(err.message)}`,
+      );
+      throw new NotFoundException(`Was an Error: ${err}`);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} championship`;
+  public async getOne(id: string) {
+    try {
+      const championship = await this.championshipRepository.getOne(id);
+      if (!championship) {
+        throw new Error(
+          `The CALENDAR with ID: ${id} was NOT FOUND on the Database!`,
+        );
+      }
+      return championship;
+    } catch (err) {
+      this.logger.log(
+        `ChampionshipService:getOne : ${JSON.stringify(err.message)}`,
+      );
+      throw new NotFoundException(`Was an Error: ${err}`);
+    }
   }
 
-  update(id: number, updateChampionshipDto: UpdateChampionshipDto) {
-    return `This action updates a #${id} championship`;
+  public async setOne(
+    id: string,
+    payLoad: UpdateChampionshipDto,
+  ): Promise<Championship> {
+    try {
+      const championship = await this.getOne(id);
+      if (!championship) {
+        throw new Error(
+          `The CHAMPIONSHIP with ID: ${id} was NOT FOUND on the Database!`,
+        );
+      } else {
+        await this.championshipRepository.setOne(id, payLoad);
+        return await this.getOne(id);
+      }
+    } catch (err) {
+      this.logger.log(
+        `ChampionshipService:getOne : ${JSON.stringify(err.message)}`,
+      );
+      throw new NotFoundException(`Was an Error: ${err}`);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} championship`;
+  public async deleteOne(id: string) {
+    try {
+      const calendar = await this.getOne(id);
+      if (!calendar) {
+        throw new Error(
+          `The CALENDAR with ID: ${id} was NOT FOUND on the Database!`,
+        );
+      } else {
+        await this.championshipRepository.deleteOne(id);
+        return { code: 200, message: 'OK Removed!' };
+      }
+    } catch (err) {
+      this.logger.log(
+        `ParameterService:deleteOne : ${JSON.stringify(err.message)}`,
+      );
+      throw new PreconditionFailedException(`Was an Error: ${err}`);
+    }
   }
 }

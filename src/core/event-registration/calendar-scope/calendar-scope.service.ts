@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Injectable,
   Logger,
@@ -91,6 +89,11 @@ export class CalendarScopeService {
         await this.calendarScopeRepository.deleteOne(id);
         return { code: 200, message: 'OK Removed!' };
       }
-    } catch (error) {}
+    } catch (err) {
+      this.logger.log(
+        `ParameterService:deleteOne : ${JSON.stringify(err.message)}`,
+      );
+      throw new PreconditionFailedException(`Was an Error: ${err}`);
+    }
   }
 }

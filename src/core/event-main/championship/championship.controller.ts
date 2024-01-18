@@ -18,17 +18,17 @@ export class ChampionshipController {
 
   @Post()
   create(@Body() createChampionshipDto: CreateChampionshipDto) {
-    return this.championshipService.create(createChampionshipDto);
+    return this.championshipService.saveOne(createChampionshipDto);
   }
 
   @Get()
   findAll() {
-    return this.championshipService.findAll();
+    return this.championshipService.getAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.championshipService.findOne(+id);
+    return this.championshipService.getOne(id);
   }
 
   @Patch(':id')
@@ -36,11 +36,11 @@ export class ChampionshipController {
     @Param('id') id: string,
     @Body() updateChampionshipDto: UpdateChampionshipDto,
   ) {
-    return this.championshipService.update(+id, updateChampionshipDto);
+    return this.championshipService.setOne(id, updateChampionshipDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.championshipService.remove(+id);
+    return this.championshipService.deleteOne(id);
   }
 }

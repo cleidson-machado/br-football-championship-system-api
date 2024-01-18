@@ -22,8 +22,8 @@ export class CalendarScopeRepository
   }
 
   public async saveOne(payLoad: CreateCalendarScopeDto) {
-    const newParameter = this.create(payLoad);
-    return await this.save(newParameter);
+    const newCalendar = this.create(payLoad);
+    return await this.save(newCalendar);
   }
 
   public async getAll(): Promise<CalendarScope[]> {
